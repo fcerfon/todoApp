@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import TodoList from './model/TodoList/TodoList';
 import './App.css';
 import TodoForm from './model/TodoList/TodoForm';
-import Json from './model/mocks/todos.json'
 
 class App extends Component {
 
   constructor() {
     super();
-    this.todos = Json;
+    this.todos = [];
+
+    this.onNewTodo = this.onNewTodo.bind(this)
+    this.reset = this.reset.bind(this);
   }
 
   onNewTodo(todoText) {
@@ -16,13 +18,26 @@ class App extends Component {
       title : todoText,
       isDone : false
     });
+    this.setState({});
+  }
+
+  reset() {
+    this.todos = [];
+    this.setState({});
   }
 
   render() {
+    let todoListComponent;
+    if (this.todos.length == 0) {
+      todoListComponent = <p>Vous n'avez aucun todo</p>
+    }
+    else {
+      todoListComponent = <TodoList todos={this.todos}></TodoList>
+    }
     return (
       <>
-        <TodoForm onDone={this.onNewTodo}></TodoForm>
-        <TodoList todos={this.todos}></TodoList>
+        <TodoForm reset={this.reset} onDone={this.onNewTodo}></TodoForm>
+        {todoListComponent}
       </>
     );
   }
